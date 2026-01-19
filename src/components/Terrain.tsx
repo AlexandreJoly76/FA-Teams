@@ -19,7 +19,14 @@ const Terrain = forwardRef<HTMLDivElement, TerrainProps>(({ children }, ref) => 
       {/* --- LOGO EN FILIGRANE (Au centre) --- */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
         {/* Assure-toi d'avoir mis logo.png (ou .jpg) dans le dossier public */}
-          <Image src="/logo.jpg" alt="Logo Club" width={192} height={192} className="w-48 h-48 object-contain opacity-50 grayscale contrast-125" />
+          <Image 
+            src="/logo.png" 
+            alt="Logo Club" 
+            width={192} 
+            height={192} 
+            draggable={false}
+            className="w-48 h-48 object-contain opacity-50 grayscale contrast-125 select-none" 
+          />
       </div>
 
       {/* --- MARQUAGES AU SOL (Lignes blanches) --- */}

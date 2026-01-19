@@ -204,7 +204,8 @@ export default function Home() {
                 poste={joueur.poste}
                 x={joueur.x}
                 y={joueur.y}
-                onDelete={isAdmin ? supprimerJoueur : () => {}} 
+                onDelete={isAdmin ? supprimerJoueur : () => {}}
+                isAdmin={isAdmin}
                 onMove={isAdmin ? deplacerJoueur : () => {}}
               />
             ))}

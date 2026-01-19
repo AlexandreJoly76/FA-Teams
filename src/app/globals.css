@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --color-club-black: #000000;
+  --color-club-green: #00C75B;
+  --color-club-gold: #C5A22E;
+  --color-club-red: #FF0000;
+}
+
 /* Empêche le rebond élastique sur mobile */
 html, body {
   overscroll-behavior: none;
