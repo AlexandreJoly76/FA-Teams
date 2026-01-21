@@ -216,7 +216,7 @@ export default function Home() {
                             <div className="relative flex-1">
                                 <select 
                                     value={nouveauPoste} 
-                                    onChange={(e) => setNouveauPoste(e.target.value as never)} 
+                                    onChange={(e) => setNouveauPoste(e.target.value as any)} 
                                     className="appearance-none w-full px-2 py-2 pr-8 rounded bg-white text-black text-base cursor-pointer outline-none border-2 border-transparent focus:border-club-green"
                                 >
                                     <option value="JOUEUR">Joueur</option>
