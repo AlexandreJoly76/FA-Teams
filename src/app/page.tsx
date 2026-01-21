@@ -246,7 +246,7 @@ export default function Home() {
                         <div key={j.id} onClick={() => isAdmin && entrerSurTerrain(j)} className={`group flex items-center justify-between bg-neutral-800 p-2 rounded border border-neutral-700 transition relative ${isAdmin ? 'cursor-pointer hover:bg-neutral-700 hover:border-club-green/50' : 'opacity-70'}`}>
                             <div className="flex items-center gap-2 pointer-events-none">
                                 <span className={`text-[10px] font-bold w-6 h-6 flex items-center justify-center rounded-full ${j.poste === 'GB' ? 'bg-yellow-400 text-black' : 'bg-neutral-600 text-white'}`}>{j.numero}</span>
-                                <span className="text-sm font-bold text-gray-200">{j.nom.charAt(0)}</span>
+                                <span className="text-sm font-bold text-gray-200">{j.nom.charAt(0)}. {j.prenom}</span>
                             </div>
                             {isAdmin && (
                                 <div className="flex gap-1 z-10">
@@ -281,7 +281,7 @@ export default function Home() {
                             <Joueur 
                                 key={joueur.id} 
                                 id={joueur.id} 
-                                nom={`${joueur.nom} ${joueur.prenom ? joueur.prenom.charAt(0)+'.' : ''}`}
+                                nom={`${joueur.nom.charAt(0)}. ${joueur.prenom ? joueur.prenom : ''}`}
                                 numero={joueur.numero}
                                 poste={joueur.poste}
                                 x={joueur.x}
@@ -310,7 +310,7 @@ export default function Home() {
                                 <span className={`text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full ${j.poste === 'GB' ? 'bg-yellow-400 text-black' : 'bg-red-600 text-white'}`}>
                                     {j.numero}
                                 </span>
-                                <span className="text-xs font-bold text-white">{j.nom}</span>
+                                <span className="text-xs font-bold text-white">{j.nom.charAt(0)}. {j.prenom}</span>
                                 
                                 {isAdmin && (
                                     <div className="flex ml-2 border-l border-white/10 pl-2 gap-2">
