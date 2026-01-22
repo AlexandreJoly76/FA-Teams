@@ -18,7 +18,6 @@ interface Player {
   est_sur_terrain: boolean;
 }
 
-// Petite flèche SVG pour les selecteurs
 const ChevronDown = () => (
   <svg className="w-4 h-4 text-club-gold pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
 );
@@ -50,14 +49,12 @@ export default function Home() {
   const joueursSuspendus = joueurs.filter(j => j.est_sur_terrain && j.y >= SEUIL_SUSPENDU);
   const joueursReserve = joueurs.filter(j => !j.est_sur_terrain);
 
-  // --- HELPER FORMAT NOM ---
   const formatNom = (nom: string, prenom: string) => {
     const initialeNom = nom ? nom.charAt(0).toUpperCase() : '';
     const prenomCapitalise = prenom ? prenom.charAt(0).toUpperCase() + prenom.slice(1) : '';
-    return `${initialeNom}.${prenomCapitalise}`;
+    return `${initialeNom}. ${prenomCapitalise}`;
   };
 
-  // --- AUTH & LOAD ---
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -88,7 +85,6 @@ export default function Home() {
     window.location.reload();
   };
 
-  // --- ACTIONS ---
   const ajouterJoueur = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nouveauNom.trim()) return;
@@ -104,6 +100,17 @@ export default function Home() {
     if(!confirm("Supprimer définitivement ?")) return;
     setJoueurs(joueurs.filter((j) => j.id !== id));
     await supabase.from('joueurs').delete().eq('id', id);
+  };
+
+  const viderLeTerrain = async () => {
+    if (!confirm("Voulez-vous vraiment renvoyer TOUT LE MONDE dans la réserve ?")) return;
+    const joueursReset = joueurs.map(j => ({ ...j, est_sur_terrain: false }));
+    setJoueurs(joueursReset);
+    await supabase
+        .from('joueurs')
+        .update({ est_sur_terrain: false })
+        .eq('categorie', categorieActuelle)
+        .eq('est_sur_terrain', true);
   };
 
   const entrerSurTerrain = async (player: Player) => {
@@ -137,16 +144,12 @@ export default function Home() {
     await supabase.from('joueurs').update({ est_sur_terrain: false }).eq('id', id);
   };
 
-  // MODIFICATION ICI : On prend désormais X et Y (position finale) et non plus un delta
   const deplacerJoueur = async (id: number, nouvelleX: number, nouvelleY: number) => {
     const joueursMisAJour = joueurs.map(j => {
-      // On remplace directement par la nouvelle position calculée proprement
       if (j.id === id) return { ...j, x: nouvelleX, y: nouvelleY };
       return j;
     });
     setJoueurs(joueursMisAJour);
-    
-    // Sauvegarde DB
     await supabase.from('joueurs').update({ x: nouvelleX, y: nouvelleY }).eq('id', id);
   };
 
@@ -163,13 +166,10 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col bg-club-black text-white relative">
-      
-      {/* HEADER */}
       <header className="w-full p-4 flex flex-col md:flex-row gap-4 justify-between items-center bg-neutral-900 border-b border-club-gold/30 z-20">
         <h1 className="text-xl md:text-2xl font-black text-club-green uppercase tracking-wider text-center md:text-left">
           FA Roumois <span className="text-white text-sm font-normal normal-case ml-2 block sm:inline">Coach Assistant</span>
         </h1>
-        
         <div className="flex gap-4 items-center justify-center w-full md:w-auto">
             <div className="relative">
                 <select 
@@ -190,7 +190,6 @@ export default function Home() {
       </header>
 
       <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-        
         <aside className="w-full lg:w-1/4 bg-neutral-900/50 border-r border-club-gold/20 p-4 flex flex-col gap-4 overflow-y-auto max-h-[40vh] lg:max-h-full">
             {isAdmin && (
                 <div className="bg-neutral-800 p-3 rounded-lg border border-club-green/30 shadow-lg">
@@ -237,10 +236,20 @@ export default function Home() {
             </div>
         </aside>
 
-        {/* --- ZONE PRINCIPALE --- */}
         <section className="flex-1 flex flex-col items-center justify-start p-4 bg-club-black/80 relative overflow-y-auto">
-             <div className="absolute top-4 right-4 z-10">
-                <button onClick={telechargerImage} className="text-club-gold text-xs hover:text-yellow-200 underline flex items-center gap-1 font-bold bg-neutral-900/80 px-3 py-1 rounded-full border border-club-gold/30">📸 Télécharger la composition du FA Roumois</button>
+             <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+                {isAdmin && (
+                    <button 
+                        onClick={viderLeTerrain} 
+                        className="text-white text-xs hover:text-red-200 flex items-center gap-1 font-bold bg-red-900/80 px-3 py-1 rounded-full border border-red-500/30 transition-colors"
+                        title="Renvoyer tout le monde en réserve"
+                    >
+                        🧹 Vider
+                    </button>
+                )}
+                <button onClick={telechargerImage} className="text-club-gold text-xs hover:text-yellow-200 underline flex items-center gap-1 font-bold bg-neutral-900/80 px-3 py-1 rounded-full border border-club-gold/30">
+                    📸 Télécharger la composition
+                </button>
              </div>
 
             <div ref={exportRef} className="flex flex-col items-center p-4 bg-club-black rounded-xl gap-4">
